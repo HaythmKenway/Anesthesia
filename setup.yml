@@ -1,0 +1,63 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Include package configuration
+      include_vars:
+        file: packages.yml
+        name: package
+    - name: installing apts  
+      ansible.builtin.apt: 
+        pkg: "{{ item }}"
+      loop: "{{ package.apt_Packages }}"
+    - name: installing snaps
+      tags: apt
+      community.general.snap:
+        name: "{{ item }}"
+        classic: true
+      loop: "{{ package.snaps }}"
+    - name: Install MegaCMD
+      tags: curl, mega
+      shell: |
+        wget https://mega.nz/linux/repo/xUbuntu_23.04/amd64/megacmd-xUbuntu_23.04_amd64.deb
+        sudo apt install ./megacmd-xUbuntu_23.04_amd64.deb -y
+      args:
+        executable: /bin/bash
+    - name: Install jless with Homebrew
+      become_user: akileswar
+      homebrew:
+        name: jless
+
+    - name: Install Go
+      tags: go,mega
+      block:
+        - name: Download and extract Go
+          become: yes
+          get_url:
+            url: "https://go.dev/dl/{{ go_version }}.linux-amd64.tar.gz"
+            dest: "/usr/local/go.tar.gz"
+          vars:
+            go_version: "go1.21.3"
+        
+        - name: Extract Go archive
+          become: yes
+          command: "tar -C /usr/local -xzf /usr/local/go.tar.gz"
+
+        - name: Add Go to PATH
+          become: yes
+          lineinfile:
+            path: "{{ item }}"
+            line: "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin"
+            create: yes
+          loop:
+            - "~/.bashrc"
+            - "~/.zshrc"
+    - name: Go Package installation
+      become_user: akileswar
+      shell: "/usr/local/go/bin/go install -v {{ item }}"
+      loop: "{{ package.gopkg }}"
+    - name: Git Config
+      become_user: akileswar
+      shell: "git config --global user.name {{ package.gitUserName }};git config --global user.email {{ package.gitUserEmail }};"
+

@@ -1,0 +1,35 @@
+apt_Packages:
+  - gnome-terminal
+  - curl
+  - gnupg
+  - ca-certificates
+  - pipx
+  - git
+  - xclip
+  - gnome-browser-connector
+  - libfuse2
+  - gcc
+  - clangd
+  - atril
+  - docker-compose
+  - podman
+snaps:
+  - discord
+  - postman
+  - spotify
+
+gitUserName: "akileswar"
+gopkg:
+    - "github.com/OJ/gobuster/v3@latest"
+    - "github.com/ffuf/ffuf/v2@latest"
+    - "github.com/owasp-amass/amass/v4/..."
+    - "github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest"
+    - "github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest"
+    - "github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest"
+    - "github.com/projectdiscovery/httpx/cmd/httpx@latest"
+    - "github.com/projectdiscovery/notify/cmd/notify@latest"
+    - "github.com/tomnomnom/assetfinder@latest"
+    - "github.com/tomnomnom/httprobe@latest"
+    - "github.com/tomnomnom/anew@latest"
+    - "github.com/lc/gau/v2/cmd/gau@latest"
+    - "sigs.k8s.io/kind@v0.20.0"
